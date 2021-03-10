@@ -14,9 +14,9 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 {
 	Clear(olc::BLACK);
 
-	std::cout << particles.size() << std::endl;
+	//std::cout << particles.size() << std::endl;
 
-	if (GetMouse(0).bPressed)
+	if (GetMouse(0).bHeld)
 	{
 		Particle p;
 		p.x = GetMouseX();
@@ -28,7 +28,7 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 	{
 		for (size_t i = 0; i < particles.size(); i++)
 		{
-			std::cout << particles[i].x << "  " << particles[i].y << std::endl;
+			//std::cout << particles[i].x << "  " << particles[i].y << std::endl;
 			Draw(olc::vi2d(particles[i].x, particles[i].y), olc::DARK_YELLOW);
 		}
 	}
@@ -46,7 +46,7 @@ void Engine::update_particles()
 {
 	for (size_t i = 0; i < particles.size(); i++)
 	{
-		if (particles[i].y < ScreenHeight())
+		if (particles[i].y <= ScreenHeight())
 		{
 			particles[i].y++;
 		}
