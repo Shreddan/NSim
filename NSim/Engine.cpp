@@ -50,5 +50,9 @@ void Engine::update_particles()
 		{
 			particles[i].y++;
 		}
+		else
+		{
+			particles[i].y = ScreenHeight() - 1;
+		}
 	}
 }
