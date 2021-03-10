@@ -21,6 +21,10 @@ protected:
 public:
 	void update_particles();
 
+	void particle_order();
+
+	void particleneighbours();
+
 	std::vector<Particle> particles;
 };
 

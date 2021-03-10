@@ -56,3 +56,16 @@ void Engine::update_particles()
 		}
 	}
 }
+
+void Engine::particle_order()
+{
+	std::sort(particles.begin(), particles.end(), [](Particle x, Particle y) {return x.x < y.x; });
+}
+
+void Engine::particleneighbours()
+{
+	for (size_t i = 0; i < particles.size(); i++)
+	{
+		//if (particles[i].y
+	}
+}
