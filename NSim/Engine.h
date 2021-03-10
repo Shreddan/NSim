@@ -5,6 +5,8 @@ struct Particle
 {
 	int x = 0;
 	int y = 0;
+	int pState = 0;
+	std::vector<Particle*> neigh;
 };
 
 class Engine :  public olc::PixelGameEngine
@@ -20,10 +22,8 @@ protected:
 
 public:
 	void update_particles();
-
-	void particle_order();
-
-	void particleneighbours();
+	void draw_particles();
+	void particleNeighbour();
 
 	std::vector<Particle> particles;
 };
