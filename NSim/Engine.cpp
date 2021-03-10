@@ -18,7 +18,6 @@ bool Engine::OnUserCreate()
 			particles.push_back(p);
 		}
 	}
-
 	particleNeighbour();
 	return true;
 }
@@ -27,15 +26,12 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 {
 	Clear(olc::BLACK);
 
-	
-
 	if (GetMouse(0).bHeld)
 	{
-		particles[];
+		particles[GetMouseY() * ScreenWidth() + GetMouseX()].pState = 1;
 	}
 
 	draw_particles();
-
 	update_particles();
 	
 	return true;
@@ -45,16 +41,24 @@ void Engine::update_particles()
 {
 	for (size_t i = 0; i < particles.size(); i++)
 	{
+		
 		if (particles[i].neigh[1]->pState == 0)
 		{
 			particles[i].neigh[1]->pState = particles[i].pState;
 			particles[i].pState = 0;
 		}
-		if (particles[i].neigh[5]->pState == 0 && particles[i].neigh[1]->pState == 1)
+		if (particles[i].x > 0 && particles[i].x < ScreenWidth() - 1)
 		{
-			particles[i].neigh[5]->pState = particles[i].pState;
-			particles[i].pState = 0;
+			if (particles[i].neigh[1]->pState == 1)
+			{
+				if (particles[i].neigh[5]->pState == 0)
+				{
+					particles[i].neigh[5]->pState = particles[i].pState;
+					particles[i].pState = 0;
+				}
+			}
 		}
+	
 	}
 }
 
@@ -64,56 +68,59 @@ void Engine::draw_particles()
 	{
 		switch (particles[i].pState)
 		{
-		case 0:
-		{
-			break;
-		}
-		case 1:
-		{
-			Draw(olc::vi2d(particles[i].x, particles[i].y), olc::YELLOW);
-			break;
-		}
+			case 0:
+			{
+				break;
+			}
+			case 1:
+			{
+				Draw(olc::vi2d(particles[i].x, particles[i].y), olc::YELLOW);
+				break;
+			}
 		}
 	}
 }
 
 void Engine::particleNeighbour()
 {
-	for (int x = 0; x < ScreenWidth(); x++)
+	if (particles.size() > 0)
 	{
-		for (int y = 0; y < ScreenHeight(); y++)
+		for (int x = 0; x < ScreenWidth(); x++)
 		{
-			if (y > 0)
+			for (int y = 0; y < ScreenHeight(); y++)
 			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 0)]);
-			}
-			if (y < ScreenHeight() - 1)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 0)]);
-			}
-			if (x > 0)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x - 1)]);
-			}
-			if (x < ScreenWidth() - 1)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x + 1)]);
-			}
-			if (y > 0 && x > 0)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x - 1)]);
-			}
-			if (y < ScreenHeight() && x > 0)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x - 1)]);
-			}
-			if (y > 0 && x < ScreenWidth() - 1)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 1)]);
-			}
-			if (y < ScreenHeight() - 1 && x < ScreenWidth() - 1)
-			{
-				particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 1)]);
+				if (y > 0)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 0)]);
+				}
+				if (y < ScreenHeight() - 1)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 0)]);
+				}
+				if (x > 0)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x - 1)]);
+				}
+				if (x < ScreenWidth() - 1)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x + 1)]);
+				}
+				if (y > 0 && x > 0)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x - 1)]);
+				}
+				if (y < ScreenHeight() && x > 0)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x - 1)]);
+				}
+				if (y > 0 && x < ScreenWidth() - 1)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 1)]);
+				}
+				if (y < ScreenHeight() - 1 && x < ScreenWidth() - 1)
+				{
+					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 1)]);
+				}
 			}
 		}
 	}
