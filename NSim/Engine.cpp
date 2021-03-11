@@ -41,13 +41,15 @@ void Engine::update_particles()
 {
 	for (size_t i = 0; i < particles.size(); i++)
 	{
-		
-		if (particles[i].neigh[1]->pState == 0)
+		if (particles[i].y > 0)
 		{
-			particles[i].neigh[1]->pState = particles[i].pState;
-			particles[i].pState = 0;
+			if (particles[i].neigh[1]->pState == 0)
+			{
+				particles[i].neigh[1]->pState = particles[i].pState;
+				particles[i].pState = 0;
+			}
 		}
-		if (particles[i].x > 0 && particles[i].x < ScreenWidth() - 1)
+		/*if (particles[i].x > 0 && particles[i].x < ScreenWidth() - 1)
 		{
 			if (particles[i].neigh[1]->pState == 1)
 			{
@@ -57,7 +59,7 @@ void Engine::update_particles()
 					particles[i].pState = 0;
 				}
 			}
-		}
+		}*/
 	
 	}
 }
@@ -93,7 +95,7 @@ void Engine::particleNeighbour()
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 0)]);
 				}
-				if (y < ScreenHeight() - 1)
+				if (y < (ScreenHeight() - 1))
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 0)]);
 				}
@@ -101,7 +103,7 @@ void Engine::particleNeighbour()
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x - 1)]);
 				}
-				if (x < ScreenWidth() - 1)
+				if (x < (ScreenWidth() - 1))
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x + 1)]);
 				}
@@ -109,19 +111,22 @@ void Engine::particleNeighbour()
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x - 1)]);
 				}
-				if (y < ScreenHeight() && x > 0)
+				if (y < (ScreenHeight() - 1) && x > 0)
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x - 1)]);
 				}
-				if (y > 0 && x < ScreenWidth() - 1)
+				if (y > 0 && x < (ScreenWidth() - 1))
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 1)]);
 				}
-				if (y < ScreenHeight() - 1 && x < ScreenWidth() - 1)
+				if (y < (ScreenHeight() - 1) && x < (ScreenWidth() - 1))
 				{
 					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 1)]);
 				}
+
+				//std::cout << particles[y * ScreenWidth() + x].neigh.size() << std::endl;
 			}
 		}
+
 	}
 }
