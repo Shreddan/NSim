@@ -7,18 +7,18 @@ Engine::Engine()
 
 bool Engine::OnUserCreate()
 {
-	for (size_t x = 0; x < ScreenWidth(); x++)
+	srand(time(NULL));
+	for (int x = 0; x < ScreenWidth(); x++)
 	{
-		for (size_t y = 0; y < ScreenHeight(); y++)
+		for (int y = 0; y < ScreenHeight(); y++)
 		{
 			Particle p;
 			p.x = x;
 			p.y = y;
-			p.pState = 0;
+			p.pState = Empty;
 			particles.push_back(p);
 		}
 	}
-	particleNeighbour();
 	return true;
 }
 
@@ -28,40 +28,50 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 
 	if (GetMouse(0).bHeld)
 	{
-		particles[GetMouseY() * ScreenWidth() + GetMouseX()].pState = 1;
+		set_Particle(GetMouseX(), GetMouseY(), Sand);
 	}
-
+	update_particles(fElapsedTime);
 	draw_particles();
-	update_particles();
-	
 	return true;
 }
 
-void Engine::update_particles()
+void Engine::update_particles(float fElapsedTime)
 {
-	for (size_t i = 0; i < particles.size(); i++)
+	int dir = 0;
+	ran = rand()% 1;
+	if (ran == 0)
 	{
-		if (particles[i].y > 0)
+		dir = -1;
+	}
+	else
+	{
+		dir = 1;
+	}
+
+	for (int y = ScreenHeight() - 1; y > 0 ; y--)
+	{
+		for (int x = 0; x < ScreenWidth(); x++)
 		{
-			if (particles[i].neigh[1]->pState == 0)
+			if (get_Particle(x, y).pState == Sand)
 			{
-				particles[i].neigh[1]->pState = particles[i].pState;
-				particles[i].pState = 0;
-			}
-		}
-		/*if (particles[i].x > 0 && particles[i].x < ScreenWidth() - 1)
-		{
-			if (particles[i].neigh[1]->pState == 1)
-			{
-				if (particles[i].neigh[5]->pState == 0)
+				if (get_Particle(x, y + 1).pState == Empty)
 				{
-					particles[i].neigh[5]->pState = particles[i].pState;
-					particles[i].pState = 0;
+					set_Particle(x, y, Empty);
+					set_Particle(x, y + 1, Sand);
+				}
+				else if (get_Particle(x + dir, y + 1).pState == Empty)  
+				{
+					set_Particle(x, y, Empty); 
+					set_Particle(x + dir, y + 1, Sand); 
 				}
 			}
-		}*/
-	
+		}
 	}
+}
+
+void Engine::set_Particle(int x, int y, int pState)
+{
+	particles[x + y * ScreenWidth()].pState = pState;
 }
 
 void Engine::draw_particles()
@@ -70,63 +80,27 @@ void Engine::draw_particles()
 	{
 		switch (particles[i].pState)
 		{
-			case 0:
+			case Empty:
 			{
 				break;
 			}
-			case 1:
+			case Sand:
 			{
 				Draw(olc::vi2d(particles[i].x, particles[i].y), olc::YELLOW);
 				break;
 			}
-		}
-	}
-}
-
-void Engine::particleNeighbour()
-{
-	if (particles.size() > 0)
-	{
-		for (int x = 0; x < ScreenWidth(); x++)
-		{
-			for (int y = 0; y < ScreenHeight(); y++)
+			case Water:
 			{
-				if (y > 0)
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 0)]);
-				}
-				if (y < (ScreenHeight() - 1))
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 0)]);
-				}
-				if (x > 0)
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x - 1)]);
-				}
-				if (x < (ScreenWidth() - 1))
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 0) * ScreenWidth() + (x + 1)]);
-				}
-				if (y > 0 && x > 0)
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x - 1)]);
-				}
-				if (y < (ScreenHeight() - 1) && x > 0)
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x - 1)]);
-				}
-				if (y > 0 && x < (ScreenWidth() - 1))
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y - 1) * ScreenWidth() + (x + 1)]);
-				}
-				if (y < (ScreenHeight() - 1) && x < (ScreenWidth() - 1))
-				{
-					particles[y * ScreenWidth() + x].neigh.push_back(&particles[(y + 1) * ScreenWidth() + (x + 1)]);
-				}
-
-				//std::cout << particles[y * ScreenWidth() + x].neigh.size() << std::endl;
+				Draw(olc::vi2d(particles[i].x, particles[i].y), olc::BLUE);
+				break;
 			}
 		}
-
 	}
 }
+
+Particle Engine::get_Particle(int x, int y)
+{
+	return particles[x + y * ScreenWidth()];
+}
+
+

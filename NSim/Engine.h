@@ -1,12 +1,21 @@
 #pragma once
 #include <olcPixelGameEngine.h>
 
+enum State
+{
+	Empty = 0,
+	Sand = 1,
+	Water = 2
+
+};
+
 struct Particle
 {
+	Particle() {  };
+	Particle(int x, int y, int pState) { this->x = x, this->y = y, this->pState = Empty; }
 	int x = 0;
 	int y = 0;
 	int pState = 0;
-	std::vector<Particle*> neigh;
 };
 
 class Engine :  public olc::PixelGameEngine
@@ -21,10 +30,12 @@ protected:
 
 
 public:
-	void update_particles();
+	void update_particles(float fElapsedTime);
+	void set_Particle(int x, int y, int pState);
 	void draw_particles();
-	void particleNeighbour();
+	Particle get_Particle(int x, int y);
 
 	std::vector<Particle> particles;
+	int ran = 0;
 };
 
