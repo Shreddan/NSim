@@ -12,7 +12,7 @@ enum State
 struct Particle
 {
 	Particle() {  };
-	Particle(int x, int y, int pState) { this->x = x, this->y = y, this->pState = Empty; }
+	Particle(int x, int y, int pState) { this->x = x, this->y = y, this->pState = pState; }
 	int x = 0;
 	int y = 0;
 	int pState = 0;
