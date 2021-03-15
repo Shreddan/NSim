@@ -26,7 +26,7 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 {
 	Clear(olc::BLACK);
 
-	if (GetMouse(0).bPressed)
+	if (GetMouse(0).bHeld)
 	{
 		set_Particle(GetMouseX(), GetMouseY(), Sand);
 	}
@@ -37,16 +37,7 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 
 void Engine::update_particles(float fElapsedTime)
 {
-	/*int dir = 0;
-	ran = rand()% 1;
-	if (ran == 0)
-	{
-		dir = -1;
-	}
-	else
-	{
-		dir = 1;
-	}*/
+	int dir = (rand() % 2) * 2 - 1;
 
 	for (int x = 0; x < ScreenWidth(); x++)
 	{
@@ -54,16 +45,16 @@ void Engine::update_particles(float fElapsedTime)
 		{
 			if (get_Particle(x, y).pState == Sand)
 			{
-				if (get_Particle(x, y + 1).pState == Empty && get_Particle(x, y + 1).y < ScreenHeight() - 1)
+				if (get_Particle(x, y + 1).pState == Empty)
 				{
 					set_Particle(x, y, Empty);
 					set_Particle(x, y + 1, Sand);
 				}
-				/*else if (get_Particle(x + dir, y + 1).pState == Empty)  
+				else if (get_Particle(x + dir, y + 1).pState == Empty)  
 				{
 					set_Particle(x, y, Empty); 
 					set_Particle(x + dir, y + 1, Sand); 
-				}*/
+				}
 			}
 		}
 	}
@@ -71,7 +62,7 @@ void Engine::update_particles(float fElapsedTime)
 
 void Engine::set_Particle(int x, int y, int pState)
 {
-	particles[y * ScreenWidth() + x].pState = pState;
+	particles[y + x * ScreenHeight()].pState = pState;
 }
 
 void Engine::draw_particles()
@@ -106,7 +97,7 @@ Particle Engine::get_Particle(int x, int y)
 	}
 	else
 	{
-		return particles[x + y * ScreenWidth()];
+		return particles[y + x * ScreenHeight()];
 	}
 }
 

@@ -4,7 +4,7 @@
 int main()
 {
     Engine eng;
-    if (eng.Construct(400, 300, 1, 1))
+    if (eng.Construct(400, 300, 3, 3))
     {
         eng.Start();
     }

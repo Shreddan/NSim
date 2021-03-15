@@ -11,7 +11,7 @@ enum State
 
 struct Particle
 {
-	Particle() {  };
+	Particle() { this->pState = Sand; };
 	Particle(int x, int y, int pState) { this->x = x, this->y = y, this->pState = pState; }
 	int x = 0;
 	int y = 0;
