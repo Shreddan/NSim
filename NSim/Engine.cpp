@@ -31,10 +31,12 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 		if (GetKey(olc::SHIFT).bHeld)
 		{
 			set_Particle(GetMouseX(), GetMouseY(), Water);
+			set_Particle(GetMouseX() + 1, GetMouseY(), Water);
 		}
 		else
 		{
 			set_Particle(GetMouseX(), GetMouseY(), Sand);
+			set_Particle(GetMouseX() + 1, GetMouseY(), Sand);
 		}
 		
 	}
@@ -82,17 +84,17 @@ void Engine::update_particles(float fElapsedTime)
 					set_Particle(x, y, Empty);
 					set_Particle(x + dir, y + 1, Water);
 				}
-				else if (get_Particle(x + dir, y).pState == Empty && get_Particle(x + dir, y).movedRight == false)
+				else if (get_Particle(x + dir, y).pState == Empty)
 				{
 					set_Particle(x, y, Empty);
-					set_Particle(x + dir, y, Water, true);
+					set_Particle(x + dir, y, Water);
 				}
 			}
 		}
 	}
 }
 
-void Engine::set_Particle(int x, int y, int pState, bool movedRight = false)
+void Engine::set_Particle(int x, int y, int pState)
 {
 	particles[y + x * ScreenHeight()].pState = pState;
 }

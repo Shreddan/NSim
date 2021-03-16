@@ -33,7 +33,7 @@ protected:
 
 public:
 	void update_particles(float fElapsedTime);
-	void set_Particle(int x, int y, int pState, bool movedRight = false);
+	void set_Particle(int x, int y, int pState);
 	void draw_particles();
 	Particle get_Particle(int x, int y);
 
