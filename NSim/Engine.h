@@ -4,15 +4,16 @@
 enum State
 {
 	Empty = 0,
-	Sand = 1,
-	WetSand = 2,
-	Water = 3
-
+	Wood = 1,
+	Sand = 2,
+	Water = 3,
+	Acid = 4,
+	AcidVapour = 5
 };
 
 struct Particle
 {
-	Particle() { this->pState = Sand; };
+	Particle() { this->pState = Wood; };
 	Particle(int x, int y, int pState) { this->x = x, this->y = y, this->pState = pState; }
 	int x = 0;
 	int y = 0;
@@ -37,7 +38,7 @@ public:
 	void draw_particles();
 	Particle get_Particle(int x, int y);
 
-
 	std::vector<Particle> particles;
+	std::vector<Particle> particles2;
 };
 
