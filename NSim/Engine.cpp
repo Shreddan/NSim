@@ -28,7 +28,15 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 
 	if (GetMouse(0).bHeld)
 	{
-		set_Particle(GetMouseX(), GetMouseY(), Sand);
+		if (GetKey(olc::SHIFT).bHeld)
+		{
+			set_Particle(GetMouseX(), GetMouseY(), Water);
+		}
+		else
+		{
+			set_Particle(GetMouseX(), GetMouseY(), Sand);
+		}
+		
 	}
 	update_particles(fElapsedTime);
 	draw_particles();
@@ -37,12 +45,13 @@ bool Engine::OnUserUpdate(float fElapsedTime)
 
 void Engine::update_particles(float fElapsedTime)
 {
-	int dir = (rand() % 2) * 2 - 1;
-
+	
 	for (int x = 0; x < ScreenWidth(); x++)
 	{
 		for (int y = ScreenHeight() - 1; y > 0; y--)
 		{
+			int dir = (rand() % 2) * 2 - 1;
+
 			if (get_Particle(x, y).pState == Sand)
 			{
 				if (get_Particle(x, y + 1).pState == Empty)
@@ -55,12 +64,35 @@ void Engine::update_particles(float fElapsedTime)
 					set_Particle(x, y, Empty); 
 					set_Particle(x + dir, y + 1, Sand); 
 				}
+				else if (get_Particle(x, y + 1).pState == Water)
+				{
+					set_Particle(x, y, Water);
+					set_Particle(x, y + 1, Sand);
+				}
+			}
+			else if (get_Particle(x, y).pState == Water)
+			{
+				if (get_Particle(x, y + 1).pState == Empty)
+				{
+					set_Particle(x, y, Empty);
+					set_Particle(x, y + 1, Water);
+				}
+				else if (get_Particle(x + dir, y + 1).pState == Empty)
+				{
+					set_Particle(x, y, Empty);
+					set_Particle(x + dir, y + 1, Water);
+				}
+				else if (get_Particle(x + dir, y).pState == Empty && get_Particle(x + dir, y).movedRight == false)
+				{
+					set_Particle(x, y, Empty);
+					set_Particle(x + dir, y, Water, true);
+				}
 			}
 		}
 	}
 }
 
-void Engine::set_Particle(int x, int y, int pState)
+void Engine::set_Particle(int x, int y, int pState, bool movedRight = false)
 {
 	particles[y + x * ScreenHeight()].pState = pState;
 }
@@ -78,6 +110,11 @@ void Engine::draw_particles()
 			case Sand:
 			{
 				Draw(olc::vi2d(particles[i].x, particles[i].y), olc::YELLOW);
+				break;
+			}
+			case WetSand:
+			{
+				Draw(olc::vi2d(particles[i].x, particles[i].y), olc::DARK_YELLOW);
 				break;
 			}
 			case Water:

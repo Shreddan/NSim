@@ -5,7 +5,8 @@ enum State
 {
 	Empty = 0,
 	Sand = 1,
-	Water = 2
+	WetSand = 2,
+	Water = 3
 
 };
 
@@ -16,6 +17,7 @@ struct Particle
 	int x = 0;
 	int y = 0;
 	int pState = 0;
+	bool movedRight = false;
 };
 
 class Engine :  public olc::PixelGameEngine
@@ -31,11 +33,11 @@ protected:
 
 public:
 	void update_particles(float fElapsedTime);
-	void set_Particle(int x, int y, int pState);
+	void set_Particle(int x, int y, int pState, bool movedRight = false);
 	void draw_particles();
 	Particle get_Particle(int x, int y);
 
+
 	std::vector<Particle> particles;
-	int ran = 0;
 };
 
